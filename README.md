@@ -6,3 +6,8 @@ Inspired by the [template](https://github.com/nimblehq/rails-templates)
 
 *These gems are added to the standard Rails stack*
 
+Start new project:
+
+```
+rails new test_gen --api -m ./rails_templates/template.rb
+```
