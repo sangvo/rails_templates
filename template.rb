@@ -27,6 +27,18 @@ def apply_template!(template_root)
   template 'README.md.tt', force: true
   template '.env.example.tt', force: true
   apply '.gitignore.rb'
+
+  after_bundle do
+    use_source_path template_root
+
+    # Stop the spring before using the generators as it might hang for a long time
+    # Issue: https://github.com/rails/spring/issues/486
+    run 'spring stop'
+  end
+
+    # Variants
+  apply '.template/variants/api/template.rb' if API_VARIANT
+  apply '.template/variants/web/template.rb' if WEB_VARIANT
 end
 
 def use_source_path(source_path)
