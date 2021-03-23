@@ -1,20 +1,21 @@
-require "shellwords"
+require 'shellwords'
+require 'tmpdir'
 
 # Variables
 APP_NAME = app_name
-APP_NAME_HUMANIZED = app_name.split(/[-_]/).map(&:capitalize).join(" ").gsub(/ Web$/, "")
+APP_NAME_HUMANIZED = app_name.split(/[-_]/).map(&:capitalize).join(' ').gsub(/ Web$/, '')
 
-RUBY_VERSION = "2.7.2".freeze
-POSTGRES_VERSION = "12.1".freeze
-REDIS_VERSION = "5.0.7".freeze
+RUBY_VERSION = '2.7.2'.freeze
+POSTGRES_VERSION = '12.1'.freeze
+REDIS_VERSION = '5.0.7'.freeze
 
 # Variants api or web MVC
-API_VARIANT = options[:api] || ENV["API"] == "true"
+API_VARIANT = options[:api] || ENV['API'] == 'true'
 WEB_VARIANT = !API_VARIANT
 
 if WEB_VARIANT
-  NODE_VERSION="14.15.4".freeze
-  NODE_SOURCE_VERSION="14".freeze # Used in Dockerfile https://github.com/nodesource/distributions
+  NODE_VERSION = '14.15.4'.freeze
+  NODE_SOURCE_VERSION = '14'.freeze # Used in Dockerfile https://github.com/nodesource/distributions
 end
 
 def apply_template!(template_root)
@@ -22,7 +23,7 @@ def apply_template!(template_root)
 
   delete_test_folder
 
-  template "Gemfile.tt", force: true
+  template 'Gemfile.tt', force: true
   template '.ruby-version.tt', force: true
   template 'README.md.tt', force: true
   template '.env.example.tt', force: true
@@ -36,9 +37,13 @@ def apply_template!(template_root)
     run 'spring stop'
   end
 
-    # Variants
+  # Variants
   apply '.template/variants/api/template.rb' if API_VARIANT
   # apply '.template/variants/web/template.rb' if WEB_VARIANT
+end
+
+def source_paths
+  @source_paths
 end
 
 def use_source_path(source_path)
@@ -46,26 +51,23 @@ def use_source_path(source_path)
 end
 
 def remote_repository
-  require "tmpdir"
-  tempdir = Dir.mktmpdir("rails-templates-rest")
+  tempdir = Dir.mktmpdir('rails-templates-rest')
   at_exit { FileUtils.remove_entry(tempdir) }
 
   git clone: [
-    "--quiet",
-    "https://github.com/sangvo/rails_templates.git",
+    '--quiet',
+    'https://github.com/sangvo/rails_templates.git',
     tempdir
-  ].map(&:shellescape).join(" ")
+  ].map(&:shellescape).join(' ')
 
   branch = __FILE__[%r{rails_templates/(.+)/template.rb}, 1]
-  if (branch)
-    Dir.chdir(tempdir) { git checkout: branch }
-  end
+  Dir.chdir(tempdir) { git checkout: branch } if branch
 
   tempdir
 end
 
 def delete_test_folder
-  FileUtils.rm_rf("test")
+  FileUtils.rm_rf('test')
 end
 
 # Init the source path
