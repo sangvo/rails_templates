@@ -38,7 +38,7 @@ def apply_template!(template_root)
 
     # Variants
   apply '.template/variants/api/template.rb' if API_VARIANT
-  apply '.template/variants/web/template.rb' if WEB_VARIANT
+  # apply '.template/variants/web/template.rb' if WEB_VARIANT
 end
 
 def use_source_path(source_path)
@@ -47,16 +47,17 @@ end
 
 def remote_repository
   require "tmpdir"
-  tempdir = Dir.mktmpdir("rails-templates")
+  tempdir = Dir.mktmpdir("rails-templates-rest")
   at_exit { FileUtils.remove_entry(tempdir) }
 
   git clone: [
     "--quiet",
-    "https://github.com/sangvo/rails-templates.git",
+    "https://github.com/sangvo/rails_templates.git",
     tempdir
   ].map(&:shellescape).join(" ")
 
-  if (branch = __FILE__[%r{rails-templates/(.+)/template.rb}, 1])
+  branch = __FILE__[%r{rails_templates/(.+)/template.rb}, 1]
+  if (branch)
     Dir.chdir(tempdir) { git checkout: branch }
   end
 
