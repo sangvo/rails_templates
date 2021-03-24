@@ -1,7 +1,3 @@
-# Controllers
-directory 'app/controllers/concerns'
-inject_into_class 'app/controllers/application_controller.rb', 'ApplicationController' do
-  <<-EOT
-  include Localization
-  EOT
-end
+use_source_path __dir__
+
+apply 'app/template.rb'
