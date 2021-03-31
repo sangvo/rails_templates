@@ -31,10 +31,11 @@ def apply_template!(template_root)
   template 'Gemfile.tt', force: true
   template '.ruby-version.tt', force: true
   template 'README.md.tt', force: true
-  template '.env.example.tt', force: true
   template '.rubocop.yml.tt', force: true
   template '.rubocop_todo.yml.tt', force: true
   apply '.gitignore.rb'
+
+  apply 'config/template.rb'
 
   after_bundle do
     use_source_path template_root

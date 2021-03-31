@@ -8,5 +8,7 @@ append_to_file '.gitignore' do
       .idea/*
       # Ignore the test coverage results from SimpleCov
       /coverage
+      # Ignore application configuration
+      /config/application.yml
   EOT
 end

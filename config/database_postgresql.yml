@@ -1,0 +1,37 @@
+default: &default
+  adapter: postgresql
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: <%= ENV.fetch("DB_USERNAME") { "root" } %>
+  password: <%= ENV["DB_PASSWORD"] %>
+  host: <%= ENV.fetch("DB_HOST") { "127.0.0.1" } %>
+  socket: /var/run/mysqld/mysqld.sock
+  redis: &redis
+    host: <%= ENV.fetch("APP_REDIS_HOST") { "localhost" } %>
+    port: <%= ENV.fetch("APP_REDIS_PORT") { "6379" } %>
+    db: 0
+
+development:
+  <<: *default
+  database: <%= ENV['DB_NAME'] %>_development
+  redis:
+    <<: *redis
+
+staging:
+  <<: *default
+  database: <%= ENV['DB_NAME'] %>_staging
+  redis:
+    <<: *redis
+
+test:
+  <<: *default
+  database: <%= ENV['DB_NAME'] %>_test
+  password: <%= ENV["DB_PASSWORD"] %>
+  redis:
+    <<: *redis
+
+production:
+  <<: *default
+  database: <%= ENV['DB_NAME'] %>_production
+  password: <%= ENV["DB_PASSWORD"] %>
+  redis:
+    <<: *redis
