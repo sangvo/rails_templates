@@ -8,6 +8,14 @@ Inspired by the [template](https://github.com/nimblehq/rails-templates)
 
 Start new project:
 
+- With Mysql Database:
+
+```sh
+rails new new_project -d mysql -m https://raw.githubusercontent.com/sangvo/rails_templates/master/template.rb
 ```
-rails new test_gen --api -m ./rails_templates/template.rb
+
+- With Postgresql Database
+
+```sh
+rails new new_project -m https://raw.githubusercontent.com/sangvo/rails_templates/master/template.rb
 ```
